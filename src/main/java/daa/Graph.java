@@ -46,5 +46,40 @@ public final class Graph {
         return adjacency[vertex];
     }
 
+    public void addEdge(int from, int to, int weight) {
+        if (from < 0 || from >= vertexCount || to < 0 || to >= vertexCount) {
+            throw new IllegalArgumentException("Vertex out of range");
+        }
+        edges.add(new Edge(from, to, weight));
+        adjacency[from].add(new Arc(to, weight));
+        if (!directed) {
+            adjacency[to].add(new Arc(from, weight));
+        }
+    }
 
+    public static Graph read(Path path) throws IOException {
+        try (Scanner input = new Scanner(Files.newBufferedReader(path))) {
+            int n = input.nextInt();
+            int m = input.nextInt();
+            String kind = input.next();
+            if (!kind.equals("directed") && !kind.equals("undirected")) {
+                throw new IOException("Expected directed or undirected");
+            }
+
+            Graph graph = new Graph(n, kind.equals("directed"));
+            for (int i = 0; i < m; i++) {
+                graph.addEdge(
+                        input.nextInt(),
+                        input.nextInt(),
+                        input.nextInt()
+                );
+            }
+            if (input.hasNext()) {
+                throw new IOException("Extra tokens after edge list");
+            }
+            return graph;
+        } catch (NoSuchElementException exception) {
+            throw new IOException("Incomplete graph file", exception);
+        }
+    }
 }
