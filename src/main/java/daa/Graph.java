@@ -30,4 +30,21 @@ public final class Graph {
         }
     }
 
+    public int vertexCount() {
+        return vertexCount;
+    }
+
+    public boolean isDirected() {
+        return directed;
+    }
+
+    public ArrayList<Edge> edges() {
+        return edges;
+    }
+
+    public ArrayList<Arc> neighbors(int vertex) {
+        return adjacency[vertex];
+    }
+
+
 }
