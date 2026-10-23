@@ -25,6 +25,46 @@ public final class Kahn {
             }
         }
 
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int vertex = queue.remove();
+            order[count++] = vertex;
 
+            for (Graph.Arc arc : graph.neighbors(vertex)) {
+                metrics.edgeScans++;
+                if (--indegree[arc.to()] == 0) {
+                    queue.add(arc.to());
+                }
+            }
+        }
+
+        return count == graph.vertexCount()
+                ? Optional.of(order)
+                : Optional.empty();
+    }
+
+    public static boolean isValid(Graph graph, int[] order) {
+        if (order.length != graph.vertexCount()) {
+            return false;
+        }
+
+        int[] position = new int[graph.vertexCount()];
+        Arrays.fill(position, -1);
+        for (int i = 0; i < order.length; i++) {
+            int vertex = order[i];
+            if (vertex < 0
+                    || vertex >= graph.vertexCount()
+                    || position[vertex] >= 0) {
+                return false;
+            }
+            position[vertex] = i;
+        }
+
+        for (Graph.Edge edge : graph.edges()) {
+            if (position[edge.u()] >= position[edge.v()]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
