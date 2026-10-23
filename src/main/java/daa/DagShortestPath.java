@@ -42,4 +42,11 @@ public final class DagShortestPath {
         return new PathResult(distance, parent);
     }
 
+    public static long sum(long[] values) {
+        long total = 0;
+        for (long value : values) {
+            total += value;
+        }
+        return total;
+    }
 }
