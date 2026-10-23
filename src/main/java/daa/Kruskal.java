@@ -10,5 +10,11 @@ public final class Kruskal {
             throw new IllegalArgumentException("Undirected graph required");
         }
 
+        ArrayList<Graph.Edge> sorted = new ArrayList<>(graph.edges());
+        sorted.sort((left, right) -> {
+            metrics.comparisons++;
+            return Integer.compare(left.weight(), right.weight());
+        });
+
     }
 }
